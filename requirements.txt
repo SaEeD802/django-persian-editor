@@ -1,0 +1,4 @@
+Django>=3.2
+bleach>=6.0.0
+python-magic-bin>=0.4.14
+tinycss2>=1.4.0

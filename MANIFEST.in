@@ -1,0 +1,16 @@
+include LICENSE
+include README.md
+include SECURITY.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include requirements.txt
+include pyproject.toml
+include setup.cfg
+include tox.ini
+recursive-include persian_editor/static *
+recursive-include persian_editor/templates *
+recursive-include persian_editor/locale *
+recursive-include persian_editor/migrations *
+recursive-include persian_editor/tests *
+recursive-include docs *
+global-exclude *.py[cod] __pycache__ *.so .DS_Store
