@@ -32,14 +32,7 @@
 }
 
 /* گروه‌بندی دکمه‌ها */
-.toolbar-group {
-    display: inline-flex;
-    margin-left: 10px;
-    border-left: 1px solid #e0e0e0;
-    padding-left: 10px;
-    align-items: center;
-    gap: 4px;
-}
+
 
 .toolbar-group:last-child {
     border-left: none;
@@ -627,9 +620,7 @@
         border-bottom-color: #444;
     }
     
-    .toolbar-group {
-        border-left-color: #444;
-    }
+    
     
     .editor-btn {
         background: #333;
@@ -778,9 +769,7 @@
 
 /* واکنش‌گرایی */
 @media (max-width: 768px) {
-    .toolbar-group {
-        margin-bottom: 8px;
-    }
+    
     
     .editor-toolbar {
         flex-direction: column;
@@ -788,13 +777,7 @@
         padding: 10px;
     }
     
-    .toolbar-group {
-        border-left: none;
-        border-bottom: 1px solid #e0e0e0;
-        padding-bottom: 8px;
-        margin-bottom: 8px;
-        width: 100%;
-    }
+    
     
     .editor-dialog {
         width: 95%;
@@ -806,3 +789,4 @@
         left: 5%;
     }
 }
+
