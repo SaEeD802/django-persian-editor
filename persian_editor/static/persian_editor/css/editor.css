@@ -1,0 +1,808 @@
+/**
+ * ویرایشگر فارسی پیشرفته
+ */
+
+/* فونت‌ها */
+@import url('https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
+
+/* کانتینر اصلی ویرایشگر */
+.persian-editor-container {
+    direction: rtl;
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    position: relative;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* نوار ابزار */
+.editor-toolbar {
+    background: linear-gradient(to bottom, #f9f9f9, #f3f3f3);
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+/* گروه‌بندی دکمه‌ها */
+.toolbar-group {
+    display: inline-flex;
+    margin-left: 10px;
+    border-left: 1px solid #e0e0e0;
+    padding-left: 10px;
+    align-items: center;
+    gap: 4px;
+}
+
+.toolbar-group:last-child {
+    border-left: none;
+}
+
+/* دکمه‌های ابزار */
+.editor-btn {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    color: #444;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+}
+
+.editor-btn:hover {
+    background: #f5f5f5;
+    border-color: #c1c9d0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+.editor-btn.active {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.editor-btn i {
+    font-size: 16px;
+}
+
+/* انتخاب‌گر رنگ */
+.color-picker-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.editor-color-picker {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: none;
+    padding: 0;
+    top: 2px;
+    left: 2px;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.color-btn {
+    position: relative;
+    z-index: 1;
+    padding-left: 30px;
+}
+
+.color-btn i {
+    transition: color 0.2s ease;
+}
+
+/* محتوای ویرایشگر */
+.editor-content {
+    min-height: 300px;
+    padding: 20px;
+    background: white;
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    overflow-y: auto;
+    color: #333;
+    border: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.editor-content:focus {
+    outline: none;
+}
+
+/* استایل‌های محتوا */
+.editor-content h1, .editor-content h2, .editor-content h3, 
+.editor-content h4, .editor-content h5, .editor-content h6 {
+    margin: 1.2em 0 0.6em;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #222;
+}
+
+.editor-content h1 { font-size: 1.8em; }
+.editor-content h2 { font-size: 1.6em; }
+.editor-content h3 { font-size: 1.4em; }
+
+.editor-content p {
+    margin: 0.8em 0;
+}
+
+.editor-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin: 1em 0;
+}
+
+.editor-content img.selected {
+    outline: 2px solid #0d6efd;
+    box-shadow: 0 0 15px rgba(13, 110, 253, 0.4);
+}
+
+.editor-content a {
+    color: #0d6efd;
+    text-decoration: none;
+    border-bottom: 1px dotted #0d6efd;
+    transition: all 0.2s;
+}
+
+.editor-content a:hover {
+    color: #0a58ca;
+    border-bottom: 1px solid #0a58ca;
+}
+
+.editor-content ul, .editor-content ol {
+    padding-right: 25px;
+    margin: 1em 0;
+}
+
+.editor-content ul li, .editor-content ol li {
+    margin-bottom: 0.5em;
+}
+
+.editor-content blockquote {
+    border-right: 4px solid #0d6efd;
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    background-color: #f8f9fa;
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+    color: #555;
+}
+
+.editor-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.editor-content table th, .editor-content table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 12px;
+    text-align: right;
+}
+
+.editor-content table th {
+    background-color: #f5f7f9;
+    font-weight: bold;
+    color: #333;
+}
+
+.editor-content table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* استایل جدول ویرایشگر */
+.editor-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.editor-table th, .editor-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    text-align: right;
+}
+
+.editor-table th {
+    background-color: #f5f7f9;
+    font-weight: bold;
+}
+
+.editor-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* حالت تمام‌صفحه */
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: white;
+    border-radius: 0;
+}
+
+.fullscreen .editor-content {
+    height: calc(100% - 60px);
+    max-height: none;
+}
+
+/* دیالوگ */
+.editor-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+}
+
+.editor-dialog {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 450px;
+    max-width: 90%;
+    overflow: hidden;
+    direction: rtl;
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    z-index: 10001;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: dialogFadeIn 0.3s ease-out;
+}
+
+@keyframes dialogFadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.editor-dialog-header {
+    background: #f8f9fa;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.editor-dialog-body {
+    padding: 20px;
+}
+
+.editor-dialog-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.editor-dialog-btn {
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.editor-dialog-btn-primary {
+    background: #0d6efd;
+    color: white;
+    border: 1px solid #0d6efd;
+}
+
+.editor-dialog-btn-primary:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.editor-dialog-btn-secondary {
+    background: white;
+    color: #212529;
+    border: 1px solid #ddd;
+}
+
+.editor-dialog-btn-secondary:hover {
+    background: #f8f9fa;
+    transform: translateY(-1px);
+}
+
+.editor-dialog .form-group {
+    margin-bottom: 18px;
+}
+
+.editor-dialog label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #444;
+}
+
+.editor-dialog .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.editor-dialog .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+    outline: none;
+}
+
+/* نشانگر بارگذاری */
+.editor-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.editor-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(13, 110, 253, 0.2);
+    border-top: 4px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* منوی تنظیمات تصویر */
+.image-settings {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    direction: rtl;
+    width: 280px;
+    animation: fadeIn 0.2s ease-out;
+    position: absolute;
+    z-index: 100;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.image-settings-header {
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #333;
+}
+
+.image-settings label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+    color: #444;
+}
+
+.image-settings-group {
+    margin-bottom: 12px;
+}
+
+.image-settings input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e0e0e0;
+    border-radius: 3px;
+    outline: none;
+}
+
+.image-settings input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #0d6efd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.image-settings input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #0d6efd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.image-settings input[type="range"]::-webkit-slider-thumb:hover {
+    background: #0b5ed7;
+    transform: scale(1.1);
+}
+
+.image-settings input[type="range"]::-moz-range-thumb:hover {
+    background: #0b5ed7;
+    transform: scale(1.1);
+}
+
+.image-width-value {
+    display: inline-block;
+    margin-right: 8px;
+    font-weight: 500;
+    color: #0d6efd;
+}
+
+.image-settings-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.image-settings-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+}
+
+.image-settings-btn:hover {
+    background: #f1f3f5;
+    border-color: #c1c9d0;
+}
+
+.image-settings-btn.active {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.editor-btn-danger {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.editor-btn-danger:hover {
+    background: #bb2d3b;
+    border-color: #bb2d3b;
+}
+
+/* استایل‌های اعلان */
+.editor-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    font-size: 14px;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: notification-slide-up 0.3s ease-out forwards;
+    direction: rtl;
+    min-width: 250px;
+    text-align: center;
+}
+
+.editor-notification-info {
+    background-color: #0d6efd;
+}
+
+.editor-notification-success {
+    background-color: #198754;
+}
+
+.editor-notification-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.editor-notification-error {
+    background-color: #dc3545;
+}
+
+.editor-notification-hide {
+    animation: notification-slide-down 0.3s ease-in forwards;
+}
+
+@keyframes notification-slide-up {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes notification-slide-down {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+}
+
+/* استایل دکمه‌های صدا و کانفتی */
+.editor-btn[data-command="sound"] {
+    position: relative;
+}
+
+.editor-btn[data-command="sound"]::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.editor-btn[data-command="sound"].active::after {
+    opacity: 1;
+    background-color: #198754;
+}
+
+/* تغییر رنگ دکمه‌ها در حالت تاریک */
+@media (prefers-color-scheme: dark) {
+    .persian-editor-container {
+        border-color: #444;
+        background-color: #2d2d2d;
+    }
+    
+    .editor-toolbar {
+        background: linear-gradient(to bottom, #333, #2a2a2a);
+        border-bottom-color: #444;
+    }
+    
+    .toolbar-group {
+        border-left-color: #444;
+    }
+    
+    .editor-btn {
+        background: #333;
+        border-color: #444;
+        color: #ddd;
+    }
+    
+    .editor-btn:hover {
+        background: #3a3a3a;
+        border-color: #555;
+    }
+    
+    .editor-btn.active {
+        background: #444;
+        border-color: #555;
+    }
+    
+    .editor-content {
+        background: #2d2d2d;
+        color: #ddd;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .editor-content h1, .editor-content h2, .editor-content h3, 
+    .editor-content h4, .editor-content h5, .editor-content h6 {
+        color: #eee;
+    }
+    
+    .editor-content a {
+        color: #6ea8fe;
+        border-bottom-color: #6ea8fe;
+    }
+    
+    .editor-content a:hover {
+        color: #8bb9fe;
+        border-bottom-color: #8bb9fe;
+    }
+    
+    .editor-content blockquote {
+        background-color: #333;
+        color: #ccc;
+    }
+    
+    .editor-content table th, .editor-content table td {
+        border-color: #444;
+    }
+    
+    .editor-content table th {
+        background-color: #333;
+        color: #eee;
+    }
+    
+    .editor-content table tr:nth-child(even) {
+        background-color: #333;
+    }
+    
+    .editor-dialog {
+        background: #2d2d2d;
+    }
+    
+    .editor-dialog-header {
+        background: #333;
+        border-bottom-color: #444;
+        color: #eee;
+    }
+    
+    .editor-dialog-footer {
+        border-top-color: #444;
+    }
+    
+    .editor-dialog-btn-secondary {
+        background: #333;
+        color: #eee;
+        border-color: #444;
+    }
+    
+    .editor-dialog-btn-secondary:hover {
+        background: #3a3a3a;
+    }
+    
+    .editor-dialog label {
+        color: #ddd;
+    }
+    
+    .editor-dialog .form-control {
+        background: #333;
+        border-color: #444;
+        color: #eee;
+    }
+    
+    .image-settings {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+    
+    .image-settings-header {
+        border-bottom-color: #444;
+        color: #eee;
+    }
+    
+    .image-settings label {
+        color: #ddd;
+    }
+    
+    .image-settings input[type="range"] {
+        background: #444;
+    }
+    
+    .image-settings-btn {
+        background: #333;
+        border-color: #444;
+        color: #ddd;
+    }
+    
+    .image-settings-btn:hover {
+        background: #3a3a3a;
+        border-color: #555;
+    }
+    
+    .image-settings-btn.active {
+        background: #444;
+        border-color: #555;
+    }
+    
+    .editor-notification {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .editor-notification-info {
+        background-color: #0d6efd;
+    }
+    
+    .editor-notification-success {
+        background-color: #198754;
+    }
+    
+    .editor-notification-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    
+    .editor-notification-error {
+        background-color: #dc3545;
+    }
+}
+
+/* واکنش‌گرایی */
+@media (max-width: 768px) {
+    .toolbar-group {
+        margin-bottom: 8px;
+    }
+    
+    .editor-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+    
+    .toolbar-group {
+        border-left: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    
+    .editor-dialog {
+        width: 95%;
+    }
+    
+    .image-settings {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+    }
+}
